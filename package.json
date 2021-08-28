@@ -1,0 +1,32 @@
+{
+  "name": "web-atelier-exercise-7",
+  "version": "1.0.0",
+  "description": "Web Atelier Exercise 7 Skeleton",
+  "main": "index.js",
+  "author": "Cesare Pautasso",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "mocha --exit",
+    "ejsc": "node ejs-compile.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.0",
+    "fs-extra": "^9.0.1",
+    "jimp": "^0.16.1",
+    "method-override": "^3.0.0",
+    "mongodb": "^3.6.3",
+    "morgan": "^1.10.0",
+    "socket.io": "^3.0.4"
+  },
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "glob-fs": "^0.1.7",
+    "mocha": "^8.1.1",
+    "node-request-interceptor": "^0.5.1",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
+  }
+}

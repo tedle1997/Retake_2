@@ -1,0 +1,18 @@
+<%#
+  #
+  # Web Atelier 2020  Exercise 6 - Persistent Web Applications with MongoDB
+  #
+  # Student: __STUDENT NAME__
+  #
+  # slideshow.ejs view
+  #
+  #%>
+<%- include("header") %>
+<img src="<%= target.src%>" style="filter:<%= target.filter%>">
+<p><a href="/pictures/slideshow?picture=<%= first._id%>">First image</a></p>
+ <p><a href="/pictures/slideshow?picture=<%= next._id%>">Next Image</a></p>
+<p><a href="/pictures/slideshow?picture=<%= prev._id%>">Previous Image</a></p>
+
+<!--<p><a href="/pictures">Gallery</a></p>-->
+
+<%- include("footer") %>

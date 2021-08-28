@@ -1,0 +1,64 @@
+<%#
+  #
+  # Web Atelier 2020  Exercise 6 - Persistent Web Applications with MongoDB
+  #
+  # Student: __STUDENT NAME__
+  #
+  # editor.ejs view
+  #
+  #%>
+<%#
+  #
+  # Web Atelier 2020  Exercise 5 - Web APIs with Express
+  #
+  # Student: Thuong L Le
+  #
+  # editor.ejs view
+  #
+  #%>
+<%- include("header")%>
+<img src="<%= target.src%>" style="filter: <%= filter%>"/>
+<form class="filter" method="post" action="/pictures/<%= target._id%>?_method=PUT">
+    <a href="/pictures/<%= target._id%>/edit?filter=none">
+        <img src="<%= target.src_thumb%>" style="filter:none"/>
+    </a>
+    <input type="submit" value="No filter">
+    <input type="hidden" name="filter" placeholder="Filter" value="none">
+</form>
+
+<form class="filter" method="post" action="/pictures/<%= target._id%>?_method=PUT">
+    <a href="/pictures/<%= target._id%>/edit?filter=opacity(0.3)">
+        <img src="<%= target.src_thumb%>" style="filter:opacity(0.3)"/>
+    </a>
+    <input type="submit" value="Choose this filter">
+    <input type="hidden" name="filter" placeholder="Filter" value="opacity(0.3)">
+</form>
+
+<form class="filter" method="post" action="/pictures/<%= target._id%>?_method=PUT">
+    <a href="/pictures/<%= target._id%>/edit?filter=grayscale(20%)sepia(54%)blur(2px)hue-rotate(244deg)saturate(206%)opacity(75%)contrast(207%)">
+        <img src="<%= target.src_thumb%>" style="filter:grayscale(20%)sepia(54%)blur(2px)hue-rotate(244deg)saturate(206%)opacity(75%)contrast(207%)"/>
+    </a>
+    <input type="submit" value="Choose this filter">
+    <input type="hidden" name="filter" placeholder="Filter" value="grayscale(20%)sepia(54%)blur(2px)hue-rotate(244deg)saturate(206%)opacity(75%)contrast(207%)">
+</form>
+
+<form class="filter" method="post" action="/pictures/<%= target._id%>?_method=PUT">
+    <a href="/pictures/<%= target._id%>/edit?filter=grayscale(20%)sepia(54%)blur(2px)brightness(65%)saturate(206%)opacity(75%)">
+        <img src="<%= target.src_thumb%>" style="filter:grayscale(20%) sepia(54%) blur(2px) brightness(65%) saturate(206%) opacity(75%)"/>
+    </a>
+    <input type="submit" value="Choose this filter">
+    <input type="hidden" name="filter" placeholder="Filter" value="grayscale(20%)sepia(54%)blur(2px)brightness(65%)saturate(206%)opacity(75%)">
+</form>
+
+<form class="edit" method="post" action="/pictures/<%= target._id%>" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="Title" value="<%= target.title%>">
+    <input type="text" name="desc" placeholder="Description" value="<%= target.desc%>">
+    <input type="text" name="favourite" placeholder="Favorite" value="<%= target.favourite%>">
+    <input type="text" name="author" placeholder="Author" value="<%= target.author%>">
+    <input type="text" name="quality" placeholder="Quality" value="<%= target.quality%>">
+    <input type="file" name="file" placeholder="Select File" value="">
+    <input type="submit" value="Upload picture to Gallery">
+</form>
+
+<%- include("footer")%>
+

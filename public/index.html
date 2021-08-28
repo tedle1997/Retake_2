@@ -1,0 +1,59 @@
+<html data-theme="light">
+    <head>
+        <title>Web Atelier Photo Album</title>
+        <link rel="stylesheet" href="/style.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@1.14.0/dist/full.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body onload="init()">
+
+        <h1>Timer Apps</h1>
+        <!--Timer app -->
+        <section id="timer-demo"></section>
+
+        <section id="connection"></section>
+
+        <section id="new-timer"></section>
+
+        <section id="timers-wall"></section>
+
+        <section id="edit-timer"></section>
+
+        <!--Pictures app -->
+        <!--Slideshow       -->
+        <section id="slideshow">
+
+        </section>
+
+        <!--Gallery         -->
+        <section id="gallery">
+
+        </section>
+
+        <!--Editor          -->
+        <section id="edit">
+
+        </section>
+
+        <!--Upload          -->
+        <section id="upload">
+
+        </section>
+
+        <!--Search and result-->
+        <form action="/pictures" method="GET">
+            <input type="text" name="search" placeholder="search picture's title">
+            <input type="submit" value="Search">
+        </form>
+        <section id="results">
+
+        </section>
+
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/ejs.min.js"></script>
+        <script src="/js/views.js"></script>
+        <script src="/js/ajax.js"></script>
+
+    </body>
+</html>
