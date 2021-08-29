@@ -2,15 +2,17 @@
 <a href="/timer/new" role="button" class="btn btn-outline border-solid border-4 flex rounded-md m-2 p-2" id="new_timer">Create new timer</a>
 <section id="new-timer"></section>
 <% Timers.forEach((timer) => {%>
-    <div class="border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2">
+
+    <div class="border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2 justify-center">
+
         <div class="flex flex-col">
             <h2 class="text-4xl text-center m-2 p-2"><%= timer.title%></h2>
             <div id="<%= timer._id%>_display" class="<%= timer.style%>"></div>
         </div>
-        <div class="flex flex-col m-2 justify-end">
-            <a href="/timer/<%= timer._id%>/edit" role="button" class="btn m-1 justify-end">Edit Timer</a>
-            <a href="/timer/<%= timer._id%>/edit" role="button" class="btn m-1 justify-end">Edit Timer</a>
-            <a href="/timer/<%= timer._id%>/delete" role="button" class="btn m-1 justify-end">Delete Timer</a>
+        <div class="flex flex-col m-2">
+            <a href="/timer/<%= timer._id%>/edit" role="button" class="btn m-2 p-2">Play Sound</a>
+            <a href="/timer/<%= timer._id%>/edit" role="button" class="btn m-2 p-2">Edit Timer</a>
+            <a href="/timer/<%= timer._id%>/delete" role="button" class="btn m-2 p-2">Delete Timer</a>
         </div>
         <div id="<%= timer._id%>_edit"></div>
     </div>

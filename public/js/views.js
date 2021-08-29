@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Sun Aug 29 2021 17:14:25 GMT+0200 (Central European Summer Time)
+//EJS Compiled Views - This file was automatically generated on Sun Aug 29 2021 19:21:23 GMT+0200 (Central European Summer Time)
 ejs.views_include = function(locals) {
     console.log("views_include_setup",locals);
     return function(path, d) {
@@ -238,7 +238,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<html><head><title><%= title %></title></head><body>\n\n<h1 class=\"text-7xl\"><%= title %></h1>"
+  , __lines = "<html><head><title><%= title %></title></head><body>\n\n<h1 class=\"text-7xl text-center\"><%= title %></h1>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -246,7 +246,7 @@ try {
   with (locals || {}) {
     ; __append("<html><head><title>")
     ; __append(escapeFn( title ))
-    ; __append("</title></head><body>\n\n<h1 class=\"text-7xl\">")
+    ; __append("</title></head><body>\n\n<h1 class=\"text-7xl text-center\">")
     ; __line = 3
     ; __append(escapeFn( title ))
     ; __append("</h1>")
@@ -480,7 +480,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<%- include(\"header\") %>\n<a href=\"/timer/new\" role=\"button\" class=\"btn btn-outline border-solid border-4 flex rounded-md m-2 p-2\" id=\"new_timer\">Create new timer</a>\n<section id=\"new-timer\"></section>\n<% Timers.forEach((timer) => {%>\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2\">\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\"><%= timer.title%></h2>\n            <div id=\"<%= timer._id%>_display\" class=\"<%= timer.style%>\"></div>\n        </div>\n        <div class=\"flex flex-col m-2 justify-end\">\n            <a href=\"/timer/<%= timer._id%>/edit\" role=\"button\" class=\"btn m-1 justify-end\">Edit Timer</a>\n            <a href=\"/timer/<%= timer._id%>/edit\" role=\"button\" class=\"btn m-1 justify-end\">Edit Timer</a>\n            <a href=\"/timer/<%= timer._id%>/delete\" role=\"button\" class=\"btn m-1 justify-end\">Delete Timer</a>\n        </div>\n        <div id=\"<%= timer._id%>_edit\"></div>\n    </div>\n<%});%>\n\n<%- include(\"footer\") %>"
+  , __lines = "<%- include(\"header\") %>\n<a href=\"/timer/new\" role=\"button\" class=\"btn btn-outline border-solid border-4 flex rounded-md m-2 p-2\" id=\"new_timer\">Create new timer</a>\n<section id=\"new-timer\"></section>\n<% Timers.forEach((timer) => {%>\n\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2 justify-center\">\n\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\"><%= timer.title%></h2>\n            <div id=\"<%= timer._id%>_display\" class=\"<%= timer.style%>\"></div>\n        </div>\n        <div class=\"flex flex-col m-2\">\n            <a href=\"/timer/<%= timer._id%>/edit\" role=\"button\" class=\"btn m-2 p-2\">Play Sound</a>\n            <a href=\"/timer/<%= timer._id%>/edit\" role=\"button\" class=\"btn m-2 p-2\">Edit Timer</a>\n            <a href=\"/timer/<%= timer._id%>/delete\" role=\"button\" class=\"btn m-2 p-2\">Delete Timer</a>\n        </div>\n        <div id=\"<%= timer._id%>_edit\"></div>\n    </div>\n<%});%>\n\n<%- include(\"footer\") %>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -490,31 +490,31 @@ try {
     ; __append("\n<a href=\"/timer/new\" role=\"button\" class=\"btn btn-outline border-solid border-4 flex rounded-md m-2 p-2\" id=\"new_timer\">Create new timer</a>\n<section id=\"new-timer\"></section>\n")
     ; __line = 4
     ;  Timers.forEach((timer) => {
-    ; __append("\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2\">\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\">")
-    ; __line = 7
+    ; __append("\n\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2 justify-center\">\n\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\">")
+    ; __line = 9
     ; __append(escapeFn( timer.title))
     ; __append("</h2>\n            <div id=\"")
-    ; __line = 8
+    ; __line = 10
     ; __append(escapeFn( timer._id))
     ; __append("_display\" class=\"")
     ; __append(escapeFn( timer.style))
-    ; __append("\"></div>\n        </div>\n        <div class=\"flex flex-col m-2 justify-end\">\n            <a href=\"/timer/")
-    ; __line = 11
-    ; __append(escapeFn( timer._id))
-    ; __append("/edit\" role=\"button\" class=\"btn m-1 justify-end\">Edit Timer</a>\n            <a href=\"/timer/")
-    ; __line = 12
-    ; __append(escapeFn( timer._id))
-    ; __append("/edit\" role=\"button\" class=\"btn m-1 justify-end\">Edit Timer</a>\n            <a href=\"/timer/")
+    ; __append("\"></div>\n        </div>\n        <div class=\"flex flex-col m-2\">\n            <a href=\"/timer/")
     ; __line = 13
     ; __append(escapeFn( timer._id))
-    ; __append("/delete\" role=\"button\" class=\"btn m-1 justify-end\">Delete Timer</a>\n        </div>\n        <div id=\"")
+    ; __append("/edit\" role=\"button\" class=\"btn m-2 p-2\">Play Sound</a>\n            <a href=\"/timer/")
+    ; __line = 14
+    ; __append(escapeFn( timer._id))
+    ; __append("/edit\" role=\"button\" class=\"btn m-2 p-2\">Edit Timer</a>\n            <a href=\"/timer/")
     ; __line = 15
     ; __append(escapeFn( timer._id))
-    ; __append("_edit\"></div>\n    </div>\n")
+    ; __append("/delete\" role=\"button\" class=\"btn m-2 p-2\">Delete Timer</a>\n        </div>\n        <div id=\"")
     ; __line = 17
+    ; __append(escapeFn( timer._id))
+    ; __append("_edit\"></div>\n    </div>\n")
+    ; __line = 19
     ; });
     ; __append("\n\n")
-    ; __line = 19
+    ; __line = 21
     ; __append( include("footer") )
   }
   return __output;
