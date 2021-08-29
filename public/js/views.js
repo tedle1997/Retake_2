@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Sat Aug 28 2021 17:28:58 GMT+0200 (Central European Summer Time)
+//EJS Compiled Views - This file was automatically generated on Sun Aug 29 2021 17:14:25 GMT+0200 (Central European Summer Time)
 ejs.views_include = function(locals) {
     console.log("views_include_setup",locals);
     return function(path, d) {
@@ -238,7 +238,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<html><head><title><%= title %></title></head><body>\n\n<h1><%= title %></h1>"
+  , __lines = "<html><head><title><%= title %></title></head><body>\n\n<h1 class=\"text-7xl\"><%= title %></h1>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -246,7 +246,7 @@ try {
   with (locals || {}) {
     ; __append("<html><head><title>")
     ; __append(escapeFn( title ))
-    ; __append("</title></head><body>\n\n<h1>")
+    ; __append("</title></head><body>\n\n<h1 class=\"text-7xl\">")
     ; __line = 3
     ; __append(escapeFn( title ))
     ; __append("</h1>")
@@ -480,29 +480,41 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<%- include(\"header\") %>\n<a href=\"/timer/new\">Create new timer</a>\n<% Timers.forEach((timer) => {%>\n\n        <p id=\"<%= timer._id%>_display\" class=\"<%= timer.style%>\">\n        </p>\n        <p>\n            <div class=\"dropdown dropdown-hover\">\n                <div tabindex=\"0\" class=\"m-1 btn\">Sound Selection</div>\n                <ul tabindex=\"0\" class=\"p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52\">\n                    <li>\n                        <a>No Sound</a>\n                    </li>\n                    <li>\n                        <a>Sound 1</a>\n                    </li>\n                    <li>\n                        <a>Sound 2</a>\n                    </li>\n                    <li>\n                        <a>Sound 3</a>\n                    </li>\n                </ul>\n            </div>\n\n            <div class=\"dropdown dropdown-hover\">\n                <div tabindex=\"0\" class=\"m-1 btn\">Clock Style</div>\n                <ul tabindex=\"0\" class=\"p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52\">\n                    <li>\n                        <a>Style 1</a>\n                    </li>\n                    <li>\n                        <a>Style 2</a>\n                    </li>\n                    <li>\n                        <a>Style 3</a>\n                    </li>\n                </ul>\n            </div>\n            <div class=\"dropdown dropdown-hover\">\n                <div tabindex=\"0\" class=\"m-1 btn\">Edit Timer</div>\n                <ul tabindex=\"0\" class=\"p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52\">\n                    <li>\n                        <a>Edit timer</a>\n                    </li>\n                    <li>\n                        <a href='/timer/<%= timer._id%>/delete'>Delete timer</a>\n                    </li>\n                </ul>\n            </div>\n        </p>\n<%});%>\n\n<%- include(\"footer\") %>"
+  , __lines = "<%- include(\"header\") %>\n<a href=\"/timer/new\" role=\"button\" class=\"btn btn-outline border-solid border-4 flex rounded-md m-2 p-2\" id=\"new_timer\">Create new timer</a>\n<section id=\"new-timer\"></section>\n<% Timers.forEach((timer) => {%>\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2\">\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\"><%= timer.title%></h2>\n            <div id=\"<%= timer._id%>_display\" class=\"<%= timer.style%>\"></div>\n        </div>\n        <div class=\"flex flex-col m-2 justify-end\">\n            <a href=\"/timer/<%= timer._id%>/edit\" role=\"button\" class=\"btn m-1 justify-end\">Edit Timer</a>\n            <a href=\"/timer/<%= timer._id%>/edit\" role=\"button\" class=\"btn m-1 justify-end\">Edit Timer</a>\n            <a href=\"/timer/<%= timer._id%>/delete\" role=\"button\" class=\"btn m-1 justify-end\">Delete Timer</a>\n        </div>\n        <div id=\"<%= timer._id%>_edit\"></div>\n    </div>\n<%});%>\n\n<%- include(\"footer\") %>"
   , __filename = undefined;
 try {
   var __output = "";
   function __append(s) { if (s !== undefined && s !== null) __output += s }
   with (locals || {}) {
     ; __append( include("header") )
-    ; __append("\n<a href=\"/timer/new\">Create new timer</a>\n")
-    ; __line = 3
+    ; __append("\n<a href=\"/timer/new\" role=\"button\" class=\"btn btn-outline border-solid border-4 flex rounded-md m-2 p-2\" id=\"new_timer\">Create new timer</a>\n<section id=\"new-timer\"></section>\n")
+    ; __line = 4
     ;  Timers.forEach((timer) => {
-    ; __append("\n\n        <p id=\"")
-    ; __line = 5
+    ; __append("\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2\">\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\">")
+    ; __line = 7
+    ; __append(escapeFn( timer.title))
+    ; __append("</h2>\n            <div id=\"")
+    ; __line = 8
     ; __append(escapeFn( timer._id))
     ; __append("_display\" class=\"")
     ; __append(escapeFn( timer.style))
-    ; __append("\">\n        </p>\n        <p>\n            <div class=\"dropdown dropdown-hover\">\n                <div tabindex=\"0\" class=\"m-1 btn\">Sound Selection</div>\n                <ul tabindex=\"0\" class=\"p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52\">\n                    <li>\n                        <a>No Sound</a>\n                    </li>\n                    <li>\n                        <a>Sound 1</a>\n                    </li>\n                    <li>\n                        <a>Sound 2</a>\n                    </li>\n                    <li>\n                        <a>Sound 3</a>\n                    </li>\n                </ul>\n            </div>\n\n            <div class=\"dropdown dropdown-hover\">\n                <div tabindex=\"0\" class=\"m-1 btn\">Clock Style</div>\n                <ul tabindex=\"0\" class=\"p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52\">\n                    <li>\n                        <a>Style 1</a>\n                    </li>\n                    <li>\n                        <a>Style 2</a>\n                    </li>\n                    <li>\n                        <a>Style 3</a>\n                    </li>\n                </ul>\n            </div>\n            <div class=\"dropdown dropdown-hover\">\n                <div tabindex=\"0\" class=\"m-1 btn\">Edit Timer</div>\n                <ul tabindex=\"0\" class=\"p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52\">\n                    <li>\n                        <a>Edit timer</a>\n                    </li>\n                    <li>\n                        <a href='/timer/")
-    ; __line = 47
+    ; __append("\"></div>\n        </div>\n        <div class=\"flex flex-col m-2 justify-end\">\n            <a href=\"/timer/")
+    ; __line = 11
     ; __append(escapeFn( timer._id))
-    ; __append("/delete'>Delete timer</a>\n                    </li>\n                </ul>\n            </div>\n        </p>\n")
-    ; __line = 52
+    ; __append("/edit\" role=\"button\" class=\"btn m-1 justify-end\">Edit Timer</a>\n            <a href=\"/timer/")
+    ; __line = 12
+    ; __append(escapeFn( timer._id))
+    ; __append("/edit\" role=\"button\" class=\"btn m-1 justify-end\">Edit Timer</a>\n            <a href=\"/timer/")
+    ; __line = 13
+    ; __append(escapeFn( timer._id))
+    ; __append("/delete\" role=\"button\" class=\"btn m-1 justify-end\">Delete Timer</a>\n        </div>\n        <div id=\"")
+    ; __line = 15
+    ; __append(escapeFn( timer._id))
+    ; __append("_edit\"></div>\n    </div>\n")
+    ; __line = 17
     ; });
     ; __append("\n\n")
-    ; __line = 54
+    ; __line = 19
     ; __append( include("footer") )
   }
   return __output;

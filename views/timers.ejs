@@ -1,54 +1,19 @@
 <%- include("header") %>
-<a href="/timer/new">Create new timer</a>
+<a href="/timer/new" role="button" class="btn btn-outline border-solid border-4 flex rounded-md m-2 p-2" id="new_timer">Create new timer</a>
+<section id="new-timer"></section>
 <% Timers.forEach((timer) => {%>
-
-        <p id="<%= timer._id%>_display" class="<%= timer.style%>">
-        </p>
-        <p>
-            <div class="dropdown dropdown-hover">
-                <div tabindex="0" class="m-1 btn">Sound Selection</div>
-                <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
-                    <li>
-                        <a>No Sound</a>
-                    </li>
-                    <li>
-                        <a>Sound 1</a>
-                    </li>
-                    <li>
-                        <a>Sound 2</a>
-                    </li>
-                    <li>
-                        <a>Sound 3</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="dropdown dropdown-hover">
-                <div tabindex="0" class="m-1 btn">Clock Style</div>
-                <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
-                    <li>
-                        <a>Style 1</a>
-                    </li>
-                    <li>
-                        <a>Style 2</a>
-                    </li>
-                    <li>
-                        <a>Style 3</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="dropdown dropdown-hover">
-                <div tabindex="0" class="m-1 btn">Edit Timer</div>
-                <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
-                    <li>
-                        <a>Edit timer</a>
-                    </li>
-                    <li>
-                        <a href='/timer/<%= timer._id%>/delete'>Delete timer</a>
-                    </li>
-                </ul>
-            </div>
-        </p>
+    <div class="border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2">
+        <div class="flex flex-col">
+            <h2 class="text-4xl text-center m-2 p-2"><%= timer.title%></h2>
+            <div id="<%= timer._id%>_display" class="<%= timer.style%>"></div>
+        </div>
+        <div class="flex flex-col m-2 justify-end">
+            <a href="/timer/<%= timer._id%>/edit" role="button" class="btn m-1 justify-end">Edit Timer</a>
+            <a href="/timer/<%= timer._id%>/edit" role="button" class="btn m-1 justify-end">Edit Timer</a>
+            <a href="/timer/<%= timer._id%>/delete" role="button" class="btn m-1 justify-end">Delete Timer</a>
+        </div>
+        <div id="<%= timer._id%>_edit"></div>
+    </div>
 <%});%>
 
 <%- include("footer") %>

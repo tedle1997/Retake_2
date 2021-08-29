@@ -27,9 +27,11 @@ returns a form to create a new timer, which requires at least the following info
 router.get("/new", function (req, res) {
     //TODO: decide WTF should the sound be
     res.send(`<form method="post" action="/timer" enctype="multipart/form-data">
-<p><input type="text" name="title" placeholder="Title" ></p>
-<p><input type="number" step="0.1" name="duration" placeholder="Duration" ></p>
-<p><input type="text" name="sound" placeholder="Sound" ></p>
+<p><input type="text" name="title" placeholder="Title"></p>
+<p><input type="number" step="1" name="duration" placeholder="Duration"></p>
+<p><input type="number" name="start" placeholder="Start From"></p>
+<p><input type="text" name="sound" placeholder="Sound"></p>
+<p><input type="text" name="style" placeholder="Style"></p>
 <p><input type="submit" value="Create new timer"></p>
 </form>`);
 });
@@ -51,6 +53,8 @@ router.post("/", function (req, res) {
     -- expired: current time > started + duration
     */
     if (req.body.title === undefined || req.body.duration === undefined) {
+        console.log(req.body.title);
+        console.log(req.body.duration);
         res.status(400).end();
         return;
     }
@@ -59,10 +63,10 @@ router.post("/", function (req, res) {
     const data = {
         title: req.body.title,
         sound: req.body.sound || "no_sound",
-        duration: req.body.duration,
-        expires: new Date().getTime() + req.body.duration,
+        duration: parseInt(req.body.duration),
+        expires: new Date().getTime() + parseInt(req.body.duration),
         style: req.body.style || "style_1",
-        started: now,
+        started: parseInt(req.body.started) || now,
     };
 
     models.timers.insertOne(data).then(() => {

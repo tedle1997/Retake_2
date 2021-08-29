@@ -77,44 +77,12 @@
 //         return advance;
 // }
 
-function timer_test(timer){
-
-    var countDownDate = parseInt(timer.started)+parseInt(timer.duration);
-    var x = setInterval(function() {
-
-        // Get today's date and time
-        var now = new Date().getTime();
-
-        // Find the distance between now and the count down date
-        var distance = countDownDate - now;
-
-        // Time calculations for days, hours, minutes and seconds
-
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        var miliseconds = Math.floor((distance % 6));
-
-        // Output the result in an element with id="demo"
-        document.getElementById(timer._id+"_display").innerHTML = days + " days " + hours + " hours "
-            + minutes + " minutes " + seconds + "seconds ";
-
-        // If the count down is over, write some text
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("demo").innerHTML = "EXPIRED";
-        }
-    }, 100);
-
-}
-
 function getTimersWall(){
     API.getTimers("").then(result => {
 
         let model = {
             Timers: result,
-            title: "Timer Wall"
+            title: "Timer App"
         }
 
         let html = ejs.views_timers(model);
@@ -139,7 +107,9 @@ function getTimersWall(){
 
                 switch (timer.style){
                     case "style_1":{
-                            document.getElementById(timer._id+"_display").innerHTML =
+                            let target = document.getElementById(timer._id+"_display");
+                            if(target === null) break;
+                            target.innerHTML =
                                 days + " days " + hours + " hours "
                                 + minutes + " minutes " + seconds + "seconds ";
 
@@ -151,6 +121,39 @@ function getTimersWall(){
                         }
                         break;
                     case "style_2":
+                        let target = document.getElementById(timer._id+"_display");
+                        if(target === null) break;
+                        target.innerHTML =
+                        `<div class="grid grid-flow-col gap-5 text-center auto-cols-max">
+                        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${days}"></span>
+                        </span>
+                        days
+                        
+                        </div>
+                        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${hours}"></span>
+                        </span>
+                        hours
+                        
+                        </div>
+                        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${minutes}"></span>
+                        </span>
+                        min
+                        
+                        </div>
+                        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${seconds};"></span>
+                        </span>
+                        sec
+                        
+                        </div>
+                        </div>`
                         break;
                     case "style_3":
                         break;
@@ -173,6 +176,74 @@ function deleteTimer(url){
     console.log(url);
     fetch(url, { method: "DELETE"}).then(res=>{
         getTimersWall();
+    });
+}
+
+function newTimer(){
+    let newTimer = document.getElementById('new-timer')
+    newTimer.innerHTML = `
+    <div class="p-10 card bg-base-200">
+        <form class="form-control">
+            Timer's Title
+            <input type="text" placeholder="Title" class="input input-info input-bordered" name="title"> 
+            Days
+            <input type="range" min="0" max="366" value="0" class="range range-lg" name="days" 
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output> 
+            Hours
+            <input type="range" max="23" value="0" class="range range-primary range-lg" name="hours"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output>  
+            Minutes
+            <input type="range" max="59" value="0" class="range range-secondary range-lg" name="minutes"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output>  
+            Seconds
+            <input type="range" max="59" value="0" class="range range-accent range-lg" name="seconds"
+            oninput="this.nextElementSibling.value = this.value">
+            <output>0</output>
+            <select class="select select-bordered select-info w-full max-w-xs" name="sound">
+              <option disabled="disabled">Choose your timer sound</option> 
+              <option selected="selected">no sound</option> 
+              <option>Sound 1</option> 
+              <option>Sound 2</option> 
+              <option>Sound 3</option>
+            </select>
+            <select class="select select-bordered select-info w-full max-w-xs" name="style">
+              <option disabled="disabled">Choose your timer's style</option> 
+              <option value="style_1">Style 1</option> 
+              <option selected value="style_2">Style 2</option> 
+              <option value="style_3">Style 3</option>
+            </select>
+            <input type="submit" value="Submit" class="btn"/>
+        </form>
+    </div>
+    `;
+
+    //new user form
+    let form = newTimer.querySelector("form");
+    form.addEventListener("submit", (event) => {
+        //stop browser from submitting form and reloading page
+        event.preventDefault();
+
+        //prepare body of request from the content of the form
+        let form_data = new FormData(form);
+        let days = parseInt(form_data.get("days"));
+        let hours = parseInt(form_data.get("hours"));
+        let minutes = parseInt(form_data.get("minutes"));
+        let seconds = parseInt(form_data.get("seconds"));
+
+
+        let duration = days * 1000 * 60 * 60 * 24 + hours * 1000 * 60 * 60 + minutes * 1000 * 60 + seconds * 1000
+        form_data.append("duration", duration);
+        console.log(form_data.get("title"));
+        console.log(form_data.get("duration"));
+
+        fetch("/timer", { method: "POST", body: form_data }).then(res => {
+            newTimer.innerHTML = "";
+            getTimersWall();
+
+        })
     });
 }
 
@@ -203,12 +274,16 @@ function linkClick(event) {
     event.preventDefault();
 
 
-    console.log("here");
     let url = new URL(event.currentTarget.href);
+    let button_url = new URL(event.target.href);
+    console.log(button_url);
 
-    //Timers link:
-    if (url.endsWith === "/delete"){
+    //Timers links:
+    if (button_url.pathname.endsWith("/delete")){
         deleteTimer(url);
+    }
+    if (button_url.pathname.endsWith("/new")){
+        newTimer();
     }
 
     //Pictures links
@@ -221,9 +296,9 @@ function linkClick(event) {
     if(url.pathname.endsWith("/duplicate")){
         duplicatePicture(url);
     }
-    if (url.pathname.endsWith("/delete")){
-        deletePicture(url);
-    }
+    // if (url.pathname.endsWith("/delete")){
+    //     deletePicture(url);
+    // }
 
 }
 
@@ -309,8 +384,6 @@ function editPicture(url){
                     })
                 })
             })
-
-
         })
 }
 
@@ -379,15 +452,6 @@ function getGallery() {
                 slideshow(picture_id);
             });
         });
-        // let button_Next = document.getElementById("next");
-        // let advance = init_slideshow(result, true, 5000);
-        // button_Next.addEventListener("click", function (e) {
-        //     advance();
-        // })
-
-
-
-
     })
 }
 
@@ -412,11 +476,16 @@ API = function (){
         })
     }
 
+    function getNewTimerForm(){
+        return fetch("/timer/new").then(res => res.text())
+    }
+
     //List of all API functions
     return {
         search,
         getupload,
-        getTimers
+        getTimers,
+        getNewTimerForm
     }
 }()
 
@@ -431,7 +500,7 @@ function init(){
     socket.on("disconnect", ()=>{
         console.log("disconnected");
         document.getElementById("connection").innerHTML = "Disconnected from server";
-        document.getElementById("slideshow").innerHTML = "";
+        // document.getElementById("slideshow").innerHTML = "";
     })
 
     socket.on("timer.expired", (event)=>{
@@ -453,37 +522,37 @@ function init(){
 
     /*Socket for pictures apps*/
 
-    socket.on('picture.created', (event)=>{
-        getGallery();
-        //if the new object matches the search results it will be displayed
-    })
-
-    socket.on('picture.edited', (event)=>{
-        getGallery();
-        //if the new object matches the search results it will be displayed
-    })
-
-    socket.on('picture.deleted', (event)=>{
-        console.log("DELETED",event);
-
-        getGallery();
-
-        //searchJSON(input.value);
-        //if the new object matches the search results it will be displayed
-    })
-
-    socket.on('slideshow', (data)=>{
-        console.log("receive broadcast");
-        document.getElementById("slideshow").innerHTML = ejs.views_slideshow(data);
-        document.getElementById("slideshow").querySelectorAll("a").forEach(link=>{
-
-            link.addEventListener("click", (event)=>{
-                event.preventDefault();
-                slideshow(link.href.split("=")[1]);
-            });
-        })
-        // slideshow(id);
-    });
+    // socket.on('picture.created', (event)=>{
+    //     getGallery();
+    //     //if the new object matches the search results it will be displayed
+    // })
+    //
+    // socket.on('picture.edited', (event)=>{
+    //     getGallery();
+    //     //if the new object matches the search results it will be displayed
+    // })
+    //
+    // socket.on('picture.deleted', (event)=>{
+    //     console.log("DELETED",event);
+    //
+    //     getGallery();
+    //
+    //     //searchJSON(input.value);
+    //     //if the new object matches the search results it will be displayed
+    // })
+    //
+    // socket.on('slideshow', (data)=>{
+    //     console.log("receive broadcast");
+    //     document.getElementById("slideshow").innerHTML = ejs.views_slideshow(data);
+    //     document.getElementById("slideshow").querySelectorAll("a").forEach(link=>{
+    //
+    //         link.addEventListener("click", (event)=>{
+    //             event.preventDefault();
+    //             slideshow(link.href.split("=")[1]);
+    //         });
+    //     })
+    //     // slideshow(id);
+    // });
 
     let msg = {test:"Hello server"};
     socket.emit("messagetest",msg)
@@ -495,17 +564,17 @@ function init(){
     //Upload button
     //Slideshow
     //Gallery with thumbnails
-    getGallery();
+    // getGallery();
     //Edit form to edit the image filter
     //Duplicate button
     //search for title or description
 
     //search handler
-    let search_input = document.querySelector("input[name='search']");
-    search_input.addEventListener("input", (event) => {
-        console.log(search_input.value);
-        searchJSON(search_input.value);
-    });
+    // let search_input = document.querySelector("input[name='search']");
+    // search_input.addEventListener("input", (event) => {
+    //     console.log(search_input.value);
+    //     searchJSON(search_input.value);
+    // });
 
     //initialize the slide show
 
