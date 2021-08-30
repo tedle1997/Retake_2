@@ -50,9 +50,13 @@ eventBus.on('timer.edited', function(event){
 });
 
 eventBus.on('timer.deleted', function(event){
-    io.emit('timer.deleted', event);
+    io.emit('ws.timer.deleted', event);
 });
 
-eventBus.on('timer.pause', function(event){
-    io.emit('timer.pause', event);
+eventBus.on('timer.paused', function(event){
+    io.emit('timer.paused', event);
+});
+
+eventBus.on('timer.resumed', function(event){
+    io.emit('timer.resumed', event);
 });

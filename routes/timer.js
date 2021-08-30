@@ -13,7 +13,6 @@ Function to get state of the timer
 */
 function currentState(started, duration) {
     let now = new Date().getTime();
-    console.log(now < parseInt(started) + parseInt(duration) ? "counting" : "expired");
     return now < parseInt(started) + parseInt(duration) ? "counting" : "expired";
 }
 
@@ -54,8 +53,6 @@ router.post("/", function (req, res) {
     -- expired: current time > started + duration
     */
     if (req.body.title === undefined || req.body.duration === undefined) {
-        console.log(req.body.title);
-        console.log(req.body.duration);
         res.status(400).end();
         return;
     }
@@ -66,7 +63,7 @@ router.post("/", function (req, res) {
         sound: req.body.sound || "no_sound",
         duration: parseInt(req.body.duration),
         expires: new Date().getTime() + parseInt(req.body.duration),
-        style: req.body.style || "style_1",
+        style: req.body.style || "style_2",
         started: parseInt(req.body.started) || now,
     };
     data.state = currentState(parseInt(data.started), parseInt(data.duration));
@@ -107,6 +104,7 @@ router.post("/:id", function (req, res) {
                     sound: req.body.sound || result.sound,
                     duration: req.body.duration || result.duration,
                     started: result.started,
+                    style: req.body.style || "style_2",
                     state: "expired",
                     update: true
                 };
@@ -160,6 +158,7 @@ router.put("/:id", function (req, res) {
                 duration: req.body.duration,
                 started: new Date().getTime(),
                 expires: new Date().getTime() + parseInt(req.body.duration),
+                style: req.body.style || "style_2"
             };
             data.state = currentState(parseInt(data.started), parseInt(data.duration));
             models.timers.insertOne(data).then((result) => {
@@ -177,7 +176,7 @@ router.put("/:id", function (req, res) {
                 sound: req.body.sound || result.sound,
                 duration: req.body.duration || result.duration,
                 started: new Date().getTime(),
-                pause: false
+                style: req.body.style || "style_2"
             };
             updated_timer.expires = parseInt(updated_timer.started)+parseInt(updated_timer.duration);
             updated_timer.state = currentState(parseInt(updated_timer.started), parseInt(updated_timer.duration));
@@ -238,7 +237,6 @@ router.get("/", function (req, res) {
             res.render("timers", model);
         }
         else if (req.accepts("json")) {
-            console.log(result);
             res.json(result);
         } else {
             res.status(406).end(); //not acceptable
@@ -252,7 +250,7 @@ POST /timer/:id/pause
 Pause a timer
 The event bus will signal the pause, database record when was the pause signalled.
 */
-router.post("/timer/:id/pause",function(req,res){
+router.post("/:id/pause",function(req,res){
     let filter = { _id: new ObjectId(req.params.id) };
 
     models.timers.findOne(filter).then((result) => {
@@ -261,13 +259,15 @@ router.post("/timer/:id/pause",function(req,res){
                 _id: result._id,
                 title: result.title,
                 sound: result.sound,
-                duration: result.expires - new Date().getTime(),
-                started: 0,
+                duration: parseInt(result.expires) - new Date().getTime(),
+                started: new Date().getTime(),
+                expires: parseInt(result.expires),
                 state: "paused",
+                style: req.body.style || "style_2"
             };
             models.timers.replaceOne(filter, updated_timer, { upsert: false }).then((result) => {
+                eventBus.emit("timer.paused", result.value)
                 res.status(200).end();
-                eventBus.emit("timer.pause", result.value)
             });
         } else {
             res.status(404).end();
@@ -280,12 +280,25 @@ POST /timer/:id/resume
 Resume a timer
 Change the timer duration to duration + paused duration
 */
-router.post("/timer/:id/resume",function(req,res){
+router.post("/:id/resume",function(req,res){
     let filter = { _id: new ObjectId(req.params.id) };
 
     models.timers.findOne(filter).then((result) => {
         if(result!==null){
-
+            let updated_timer = {
+                _id: result._id,
+                title: result.title,
+                sound: result.sound,
+                duration: result.duration,
+                started: new Date().getTime(),
+                expires: new Date().getTime() + result.duration,
+                style: req.body.style || "style_2"
+            };
+            updated_timer.state = currentState(parseInt(updated_timer.started), parseInt(updated_timer.duration));
+            models.timers.replaceOne(filter, updated_timer, { upsert: false }).then((result) => {
+                eventBus.emit("timer.resumed", result.value)
+                res.status(200).end();
+            });
         } else {
             res.status(404).end();
         }

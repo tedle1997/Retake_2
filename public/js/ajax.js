@@ -1,3 +1,5 @@
+
+
 function getTimersWall(){
     API.getTimers("").then(result => {
 
@@ -10,7 +12,7 @@ function getTimersWall(){
 
         result.forEach((timer) => {
             let countDownDate = parseInt(timer.started)+parseInt(timer.duration);
-            let x = setInterval(function() {
+            let x = setInterval(function(){
 
                 // Get today's date and time
                 let now = new Date().getTime();
@@ -18,17 +20,27 @@ function getTimersWall(){
                 // Find the distance between now and the count down date
                 let distance = countDownDate - now;
 
+                let pause_resume_btn = document.getElementById(timer._id+"_pause_resume");
+                if(timer.state === "paused"){
+                    clearInterval(x);
+                    distance = parseInt(timer.expires)-parseInt(timer.started);
+                    pause_resume_btn.innerHTML = "Resume";
+                    let link = pause_resume_btn.getAttribute('href').replace("/pause", "/resume");
+                    pause_resume_btn.setAttribute('href',link);
+                } else if (pause_resume_btn.innerHTML === "Resume"){
+                    pause_resume_btn.innerHTML = "Pause";
+                    let link = pause_resume_btn.getAttribute('href').replace("/resume", "/pause");
+                    pause_resume_btn.setAttribute('href',link);
+                }
+
                 // If the count down is over, write some text
                 if (distance < 0) {
                     clearInterval(x);
-                    document.getElementById(timer._id+"_display").innerHTML = "EXPIRED";
                     if(timer.sound!=="no_sound"){
                         let audio = new Audio("../sound/"+timer.sound+".mp3");
                         audio.play();
                     }
                 }
-
-                if(timer.state)
 
                 // Time calculations for days, hours, minutes and seconds
                 let days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -97,7 +109,6 @@ function getTimersWall(){
 
 function deleteTimer(url){
     url = url.pathname.replace("/delete", "");
-    console.log(url);
     fetch(url, { method: "DELETE"}).then(res=>{
         getTimersWall();
     });
@@ -123,8 +134,6 @@ function newTimer(){
 
         let duration = days * 1000 * 60 * 60 * 24 + hours * 1000 * 60 * 60 + minutes * 1000 * 60 + seconds * 1000
         form_data.append("duration", duration);
-        console.log(form_data.get("title"));
-        console.log(form_data.get("duration"));
 
         fetch("/timer", { method: "POST", body: form_data }).then(res => {
             newTimer.innerHTML = "";
@@ -143,20 +152,20 @@ function editTimer(url) {
     } else {
         image_filter = url.search.replace("?filter=", "");
     }
-    console.log(url_path);
-
+    // console.log(url_path);
 }
-function pauseResumeTimer(url){
 
+function pauseResumeTimer(url){
+    fetch(url, {method: "POST"}).then(res => {
+    });
 }
 
 function linkClick(event) {
     event.preventDefault();
 
-
     let url = new URL(event.currentTarget.href);
     let button_url = new URL(event.target.href);
-    console.log(button_url);
+    // console.log(button_url);
 
     //Timers links:
     if (button_url.pathname.endsWith("/delete")){
@@ -171,12 +180,14 @@ function linkClick(event) {
     if(button_url.pathname.endsWith("/pause")){
         pauseResumeTimer(url);
     }
+    if(button_url.pathname.endsWith("/resume")){
+        pauseResumeTimer(url);
+    }
 
 }
 
 
 API = function (){
-
 
     function getTimers(q){
         return fetch("/timer?search="+q, { headers: { "Accept": "application/json" } }).then(res =>{
@@ -221,12 +232,17 @@ function init(){
         getTimersWall();
     })
 
-    socket.on("timer.deleted", (event) =>{
+    socket.on("ws.timer.deleted", (event) =>{
        getTimersWall();
     })
 
+    socket.on("timer.paused", (event)=>{
+        window.location.reload();
+    })
 
-
+    socket.on("timer.resumed", (event)=>{
+        window.location.reload();
+    })
 
     let msg = {test:"Hello server"};
     socket.emit("messagetest",msg)
