@@ -33,7 +33,8 @@ module.exports.eventBus = eventBus;
 async function checkTimers() {
     const expiredTimers = await models.timers.find({
         expires: { $lte: Date.now() },
-        update: { $exists: false }
+        update: { $exists: false },
+        state: {$ne: "paused"}
         }).toArray();
     if (expiredTimers.length!==0){
         io.emit("timer.expired", expiredTimers);

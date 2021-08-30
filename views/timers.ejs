@@ -7,13 +7,14 @@
         <div class="flex flex-col">
             <h2 class="text-4xl text-center m-2 p-2"><%= timer.title%></h2>
             <div id="<%= timer._id%>_display" class="<%= timer.style%>"></div>
+            <div id="<%= timer._id%>_edit"></div>
         </div>
         <div class="flex flex-col m-2">
             <a href="/timer/<%= timer._id%>/pause" role="button" class="btn m-2 p-2" id="<%= timer._id%>_pause_resume">Pause</a>
-            <a href="/timer/<%= timer._id%>/edit" role="button" class="btn m-2 p-2">Edit Timer</a>
-            <a href="/timer/<%= timer._id%>/delete" role="button" class="btn m-2 p-2">Delete Timer</a>
+            <a href="/timer/<%= timer._id%>/edit" role="button" class="btn m-2 p-2" id="<%= timer._id%>_edit_btn">Edit Timer</a>
+            <a href="/timer/<%= timer._id%>/delete" role="button" class="btn m-2 p-2" id="<%= timer._id%>_delete">Delete Timer</a>
         </div>
-        <div id="<%= timer._id%>_edit"></div>
+
     </div>
 <%});%>
 

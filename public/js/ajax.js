@@ -27,7 +27,7 @@ function getTimersWall(){
                     pause_resume_btn.innerHTML = "Resume";
                     let link = pause_resume_btn.getAttribute('href').replace("/pause", "/resume");
                     pause_resume_btn.setAttribute('href',link);
-                } else if (pause_resume_btn.innerHTML === "Resume"){
+                } else if (pause_resume_btn !== null && pause_resume_btn.innerHTML === "Resume"){
                     pause_resume_btn.innerHTML = "Pause";
                     let link = pause_resume_btn.getAttribute('href').replace("/resume", "/pause");
                     pause_resume_btn.setAttribute('href',link);
@@ -51,18 +51,49 @@ function getTimersWall(){
 
                 switch (timer.style){
                     case "style_1":{
-                            let target = document.getElementById(timer._id+"_display");
-                            if(target === null) break;
-                            target.innerHTML =
-                                days + " days " + hours + " hours "
-                                + minutes + " minutes " + seconds + "seconds ";
+                        let target = document.getElementById(timer._id + "_display");
+                        if (target === null) break;
+                        target.innerHTML =
+                            `<div class="grid grid-flow-col gap-5 text-center auto-cols-max">
+                        <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${days}"></span>
+                        </span>
+                        days
+                        
+                        </div>
+                        <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${hours}"></span>
+                        </span>
+                        hours
+                        
+                        </div>
+                        <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${minutes}"></span>
+                        </span>
+                        min
+                        
+                        </div>
+                        <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${seconds};"></span>
+                        </span>
+                        sec
+                        
+                        </div>
+                        </div>`;
+                        document.getElementById(timer._id+"_edit_btn").classList.add("btn-accent");
+                        document.getElementById(timer._id+"_pause_resume").classList.add("btn-accent");
+                        document.getElementById(timer._id+"_delete").classList.add("btn-accent");
                         }
                         break;
-                    case "style_2":
-                        let target = document.getElementById(timer._id+"_display");
-                        if(target === null) break;
+                    case "style_2": {
+                        let target = document.getElementById(timer._id + "_display");
+                        if (target === null) break;
                         target.innerHTML =
-                        `<div class="grid grid-flow-col gap-5 text-center auto-cols-max">
+                            `<div class="grid grid-flow-col gap-5 text-center auto-cols-max">
                         <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
                         <span class="font-mono text-5xl countdown">
                         <span style="--value:${days}"></span>
@@ -92,8 +123,49 @@ function getTimersWall(){
                         
                         </div>
                         </div>`
+                    }
                         break;
-                    case "style_3":
+                    case "style_3": {
+                        let target = document.getElementById(timer._id + "_display");
+                        if (target === null) break;
+                        target.innerHTML =
+                            `<div class="grid grid-flow-col gap-5 text-center auto-cols-max">
+
+                        <div class="flex flex-col p-2  bg-secondary rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${days}"></span>
+                        </span>
+                        days       
+                        </div>
+
+                        
+                        <div class="flex flex-col p-2  bg-secondary rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${hours}"></span>
+                        </span>
+                        hours
+                        
+                        </div>
+                        <div class="flex flex-col p-2  bg-secondary rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${minutes}"></span>
+                        </span>
+                        min
+                        
+                        </div>
+                        <div class="flex flex-col p-2  bg-secondary rounded-box text-neutral-content">
+                        <span class="font-mono text-5xl countdown">
+                        <span style="--value:${seconds};"></span>
+                        </span>
+                        sec
+                        
+                        </div>
+                        </div>`;
+                        document.getElementById(timer._id+"_edit_btn").classList.add("btn-secondary");
+                        document.getElementById(timer._id+"_pause_resume").classList.add("btn-secondary");
+                        document.getElementById(timer._id+"_delete").classList.add("btn-secondary");
+
+                    }
                         break;
                 }
             }, 100);
@@ -114,6 +186,17 @@ function deleteTimer(url){
     });
 }
 
+function addDurationToFormData(form_data){
+
+    let days = parseInt(form_data.get("days"));
+    let hours = parseInt(form_data.get("hours"));
+    let minutes = parseInt(form_data.get("minutes"));
+    let seconds = parseInt(form_data.get("seconds"));
+
+    let duration = days * 1000 * 60 * 60 * 24 + hours * 1000 * 60 * 60 + minutes * 1000 * 60 + seconds * 1000
+    form_data.append("duration", duration);
+}
+
 function newTimer(){
     let newTimer = document.getElementById('new-timer')
     newTimer.innerHTML = ejs.views_new_timer();
@@ -124,40 +207,58 @@ function newTimer(){
         //stop browser from submitting form and reloading page
         event.preventDefault();
 
-        //prepare body of request from the content of the form
+        // prepare body of request from the content of the form
         let form_data = new FormData(form);
-        let days = parseInt(form_data.get("days"));
-        let hours = parseInt(form_data.get("hours"));
-        let minutes = parseInt(form_data.get("minutes"));
-        let seconds = parseInt(form_data.get("seconds"));
-
-
-        let duration = days * 1000 * 60 * 60 * 24 + hours * 1000 * 60 * 60 + minutes * 1000 * 60 + seconds * 1000
-        form_data.append("duration", duration);
-
+        addDurationToFormData(form_data);
         fetch("/timer", { method: "POST", body: form_data }).then(res => {
             newTimer.innerHTML = "";
             getTimersWall();
-
         })
     });
 }
 
 function editTimer(url) {
-    let url_path = url.pathname.replace("/edit","");
-    // if(url.pathname.split("?"))
-    let image_filter = "";
-    if(url.search === ""){
-        image_filter = "none"
-    } else {
-        image_filter = url.search.replace("?filter=", "");
-    }
+
+    let id = url.pathname.split("/")[2];
+
+    fetch("/timer/"+id,{method:"GET", headers:{accept:"application/json"}}).then(result=>{
+        return result.json();
+    }).then(data => {
+        console.log(data);
+        let model = {
+            timer: data
+        }
+        let editor = document.getElementById(id+"_edit");
+        editor.innerHTML = ejs.views_timer_editor(model);
+    }).then(res => {
+        let editor = document.getElementById(id+"_edit");
+        let form = editor.querySelector("form");
+        form.addEventListener("submit", (event)=>{
+            event.preventDefault();
+
+            let edited_form_data = new FormData(form);
+            addDurationToFormData(edited_form_data);
+
+            fetch("/timer/"+id, {method:"PUT", body: edited_form_data}).then(result => {
+                editor.innerHTML = "";
+            })
+        })
+    })
+
+
+    // let url_path = url.pathname.replace("/edit","");
+    // // if(url.pathname.split("?"))
+    // let image_filter = "";
+    // if(url.search === ""){
+    //     image_filter = "none"
+    // } else {
+    //     image_filter = url.search.replace("?filter=", "");
+    // }
     // console.log(url_path);
 }
 
 function pauseResumeTimer(url){
-    fetch(url, {method: "POST"}).then(res => {
-    });
+    fetch(url, {method: "POST"});
 }
 
 function linkClick(event) {
@@ -229,7 +330,7 @@ function init(){
     })
 
     socket.on("timer.edited", (event) => {
-        getTimersWall();
+        window.location.reload();
     })
 
     socket.on("ws.timer.deleted", (event) =>{
