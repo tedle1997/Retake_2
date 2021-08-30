@@ -1,4 +1,4 @@
-//EJS Compiled Views - This file was automatically generated on Sun Aug 29 2021 19:21:23 GMT+0200 (Central European Summer Time)
+//EJS Compiled Views - This file was automatically generated on Sun Aug 29 2021 21:25:36 GMT+0200 (Central European Summer Time)
 ejs.views_include = function(locals) {
     console.log("views_include_setup",locals);
     return function(path, d) {
@@ -258,6 +258,66 @@ try {
 
 }
 
+ejs.views_new_timer = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<div class=\"p-10 card bg-base-200\">\n    <form class=\"form-control\">\n        Timer's Title\n        <input type=\"text\" placeholder=\"Title\" class=\"input input-info input-bordered\" name=\"title\">\n        Days\n        <input type=\"range\" min=\"0\" max=\"366\" value=\"0\" class=\"range range-lg\" name=\"days\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Hours\n        <input type=\"range\" max=\"23\" value=\"0\" class=\"range range-primary range-lg\" name=\"hours\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Minutes\n        <input type=\"range\" max=\"59\" value=\"0\" class=\"range range-secondary range-lg\" name=\"minutes\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Seconds\n        <input type=\"range\" max=\"59\" value=\"0\" class=\"range range-accent range-lg\" name=\"seconds\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        <select class=\"select select-bordered select-info w-full max-w-xs\" name=\"sound\">\n            <option disabled=\"disabled\">Choose your timer sound</option>\n            <option selected=\"selected\" value=\"no_sound\">no sound</option>\n            <option value=\"sound_1\">Sound 1</option>\n            <option value=\"sound_2\">Sound 2</option>\n            <option value=\"sound_3\">Sound 3</option>\n        </select>\n        <select class=\"select select-bordered select-info w-full max-w-xs\" name=\"style\">\n            <option disabled=\"disabled\">Choose your timer's style</option>\n            <option value=\"style_1\">Style 1</option>\n            <option selected value=\"style_2\">Style 2</option>\n            <option value=\"style_3\">Style 3</option>\n        </select>\n        <input type=\"submit\" value=\"Submit\" class=\"btn\"/>\n    </form>\n</div>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<div class=\"p-10 card bg-base-200\">\n    <form class=\"form-control\">\n        Timer's Title\n        <input type=\"text\" placeholder=\"Title\" class=\"input input-info input-bordered\" name=\"title\">\n        Days\n        <input type=\"range\" min=\"0\" max=\"366\" value=\"0\" class=\"range range-lg\" name=\"days\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Hours\n        <input type=\"range\" max=\"23\" value=\"0\" class=\"range range-primary range-lg\" name=\"hours\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Minutes\n        <input type=\"range\" max=\"59\" value=\"0\" class=\"range range-secondary range-lg\" name=\"minutes\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Seconds\n        <input type=\"range\" max=\"59\" value=\"0\" class=\"range range-accent range-lg\" name=\"seconds\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        <select class=\"select select-bordered select-info w-full max-w-xs\" name=\"sound\">\n            <option disabled=\"disabled\">Choose your timer sound</option>\n            <option selected=\"selected\" value=\"no_sound\">no sound</option>\n            <option value=\"sound_1\">Sound 1</option>\n            <option value=\"sound_2\">Sound 2</option>\n            <option value=\"sound_3\">Sound 3</option>\n        </select>\n        <select class=\"select select-bordered select-info w-full max-w-xs\" name=\"style\">\n            <option disabled=\"disabled\">Choose your timer's style</option>\n            <option value=\"style_1\">Style 1</option>\n            <option selected value=\"style_2\">Style 2</option>\n            <option value=\"style_3\">Style 3</option>\n        </select>\n        <input type=\"submit\" value=\"Submit\" class=\"btn\"/>\n    </form>\n</div>")
+    ; __line = 36
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
 ejs.views_pictures = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
 ) {
 rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
@@ -436,6 +496,129 @@ try {
 
 }
 
+ejs.views_time_editor = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<div class=\"p-10 card bg-base-200\">\n    <form class=\"form-control\">\n        Timer's Title\n        <input type=\"text\" placeholder=\"Title\" class=\"input input-info input-bordered\" name=\"title\">\n        Days\n        <input type=\"range\" min=\"0\" max=\"366\" value=\"0\" class=\"range range-lg\" name=\"days\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Hours\n        <input type=\"range\" max=\"23\" value=\"0\" class=\"range range-primary range-lg\" name=\"hours\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Minutes\n        <input type=\"range\" max=\"59\" value=\"0\" class=\"range range-secondary range-lg\" name=\"minutes\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Seconds\n        <input type=\"range\" max=\"59\" value=\"0\" class=\"range range-accent range-lg\" name=\"seconds\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        <select class=\"select select-bordered select-info w-full max-w-xs\" name=\"sound\">\n            <option disabled=\"disabled\">Choose your timer sound</option>\n            <option selected=\"selected\" value=\"no_sound\">no sound</option>\n            <option value=\"sound_1\">Sound 1</option>\n            <option value=\"sound_2\">Sound 2</option>\n            <option value=\"sound_3\">Sound 3</option>\n        </select>\n        <select class=\"select select-bordered select-info w-full max-w-xs\" name=\"style\">\n            <option disabled=\"disabled\">Choose your timer's style</option>\n            <option value=\"style_1\">Style 1</option>\n            <option selected value=\"style_2\">Style 2</option>\n            <option value=\"style_3\">Style 3</option>\n        </select>\n        <input type=\"submit\" value=\"Submit\" class=\"btn\"/>\n    </form>\n</div>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<div class=\"p-10 card bg-base-200\">\n    <form class=\"form-control\">\n        Timer's Title\n        <input type=\"text\" placeholder=\"Title\" class=\"input input-info input-bordered\" name=\"title\">\n        Days\n        <input type=\"range\" min=\"0\" max=\"366\" value=\"0\" class=\"range range-lg\" name=\"days\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Hours\n        <input type=\"range\" max=\"23\" value=\"0\" class=\"range range-primary range-lg\" name=\"hours\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Minutes\n        <input type=\"range\" max=\"59\" value=\"0\" class=\"range range-secondary range-lg\" name=\"minutes\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        Seconds\n        <input type=\"range\" max=\"59\" value=\"0\" class=\"range range-accent range-lg\" name=\"seconds\"\n               oninput=\"this.nextElementSibling.value = this.value\">\n        <output>0</output>\n        <select class=\"select select-bordered select-info w-full max-w-xs\" name=\"sound\">\n            <option disabled=\"disabled\">Choose your timer sound</option>\n            <option selected=\"selected\" value=\"no_sound\">no sound</option>\n            <option value=\"sound_1\">Sound 1</option>\n            <option value=\"sound_2\">Sound 2</option>\n            <option value=\"sound_3\">Sound 3</option>\n        </select>\n        <select class=\"select select-bordered select-info w-full max-w-xs\" name=\"style\">\n            <option disabled=\"disabled\">Choose your timer's style</option>\n            <option value=\"style_1\">Style 1</option>\n            <option selected value=\"style_2\">Style 2</option>\n            <option value=\"style_3\">Style 3</option>\n        </select>\n        <input type=\"submit\" value=\"Submit\" class=\"btn\"/>\n    </form>\n</div>")
+    ; __line = 36
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
+ejs.views_timer = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
+) {
+rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
+  var lines = str.split('\n');
+  var start = Math.max(lineno - 3, 0);
+  var end = Math.min(lines.length, lineno + 3);
+  var filename = esc(flnm);
+  // Error context
+  var context = lines.slice(start, end).map(function (line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+};
+escapeFn = escapeFn || function (markup) {
+  return markup == undefined
+    ? ''
+    : String(markup)
+      .replace(_MATCH_HTML, encode_char);
+};
+var _ENCODE_HTML_RULES = {
+      "&": "&amp;"
+    , "<": "&lt;"
+    , ">": "&gt;"
+    , '"': "&#34;"
+    , "'": "&#39;"
+    }
+  , _MATCH_HTML = /[&<>'"]/g;
+function encode_char(c) {
+  return _ENCODE_HTML_RULES[c] || c;
+};
+;
+var __line = 1
+  , __lines = "<div class=\"grid grid-flow-col gap-5 text-center auto-cols-max\">\n    <div class=\"flex flex-col p-2 bg-neutral rounded-box text-neutral-content\">\n                        <span class=\"font-mono text-5xl countdown\">\n                        <span style=\"--value:<%= data.days%>>\"></span>\n                        </span>\n        days\n\n    </div>\n    <div class=\"flex flex-col p-2 bg-neutral rounded-box text-neutral-content\">\n                        <span class=\"font-mono text-5xl countdown\">\n                        <span style=\"--value:${hours}\"></span>\n                        </span>\n        hours\n\n    </div>\n    <div class=\"flex flex-col p-2 bg-neutral rounded-box text-neutral-content\">\n                        <span class=\"font-mono text-5xl countdown\">\n                        <span style=\"--value:${minutes}\"></span>\n                        </span>\n        min\n\n    </div>\n    <div class=\"flex flex-col p-2 bg-neutral rounded-box text-neutral-content\">\n                        <span class=\"font-mono text-5xl countdown\">\n                        <span style=\"--value:${seconds};\"></span>\n                        </span>\n        sec\n\n    </div>\n</div>"
+  , __filename = undefined;
+try {
+  var __output = "";
+  function __append(s) { if (s !== undefined && s !== null) __output += s }
+  with (locals || {}) {
+    ; __append("<div class=\"grid grid-flow-col gap-5 text-center auto-cols-max\">\n    <div class=\"flex flex-col p-2 bg-neutral rounded-box text-neutral-content\">\n                        <span class=\"font-mono text-5xl countdown\">\n                        <span style=\"--value:")
+    ; __line = 4
+    ; __append(escapeFn( data.days))
+    ; __append(">\"></span>\n                        </span>\n        days\n\n    </div>\n    <div class=\"flex flex-col p-2 bg-neutral rounded-box text-neutral-content\">\n                        <span class=\"font-mono text-5xl countdown\">\n                        <span style=\"--value:${hours}\"></span>\n                        </span>\n        hours\n\n    </div>\n    <div class=\"flex flex-col p-2 bg-neutral rounded-box text-neutral-content\">\n                        <span class=\"font-mono text-5xl countdown\">\n                        <span style=\"--value:${minutes}\"></span>\n                        </span>\n        min\n\n    </div>\n    <div class=\"flex flex-col p-2 bg-neutral rounded-box text-neutral-content\">\n                        <span class=\"font-mono text-5xl countdown\">\n                        <span style=\"--value:${seconds};\"></span>\n                        </span>\n        sec\n\n    </div>\n</div>")
+    ; __line = 30
+  }
+  return __output;
+} catch (e) {
+  rethrow(e, __lines, __filename, __line, escapeFn);
+}
+
+}
+
 ejs.views_timers = function(locals, escapeFn, include = ejs.views_include(locals), rethrow
 ) {
 rethrow = rethrow || function rethrow(err, str, flnm, lineno, esc) {
@@ -480,7 +663,7 @@ function encode_char(c) {
 };
 ;
 var __line = 1
-  , __lines = "<%- include(\"header\") %>\n<a href=\"/timer/new\" role=\"button\" class=\"btn btn-outline border-solid border-4 flex rounded-md m-2 p-2\" id=\"new_timer\">Create new timer</a>\n<section id=\"new-timer\"></section>\n<% Timers.forEach((timer) => {%>\n\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2 justify-center\">\n\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\"><%= timer.title%></h2>\n            <div id=\"<%= timer._id%>_display\" class=\"<%= timer.style%>\"></div>\n        </div>\n        <div class=\"flex flex-col m-2\">\n            <a href=\"/timer/<%= timer._id%>/edit\" role=\"button\" class=\"btn m-2 p-2\">Play Sound</a>\n            <a href=\"/timer/<%= timer._id%>/edit\" role=\"button\" class=\"btn m-2 p-2\">Edit Timer</a>\n            <a href=\"/timer/<%= timer._id%>/delete\" role=\"button\" class=\"btn m-2 p-2\">Delete Timer</a>\n        </div>\n        <div id=\"<%= timer._id%>_edit\"></div>\n    </div>\n<%});%>\n\n<%- include(\"footer\") %>"
+  , __lines = "<%- include(\"header\") %>\n<a href=\"/timer/new\" role=\"button\" class=\"btn btn-outline border-solid border-4 flex rounded-md m-2 p-2\" id=\"new_timer\">Create new timer</a>\n<section id=\"new-timer\"></section>\n<% Timers.forEach((timer) => {%>\n\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2 justify-center\">\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\"><%= timer.title%></h2>\n            <div id=\"<%= timer._id%>_display\" class=\"<%= timer.style%>\"></div>\n        </div>\n        <div class=\"flex flex-col m-2\">\n            <a href=\"/timer/<%= timer._id%>/pause\" role=\"button\" class=\"btn m-2 p-2\" id=\"<%= timer._id%>_pause_resume\">Pause</a>\n            <a href=\"/timer/<%= timer._id%>/edit\" role=\"button\" class=\"btn m-2 p-2\">Edit Timer</a>\n            <a href=\"/timer/<%= timer._id%>/delete\" role=\"button\" class=\"btn m-2 p-2\">Delete Timer</a>\n        </div>\n        <div id=\"<%= timer._id%>_edit\"></div>\n    </div>\n<%});%>\n\n<%- include(\"footer\") %>"
   , __filename = undefined;
 try {
   var __output = "";
@@ -490,31 +673,33 @@ try {
     ; __append("\n<a href=\"/timer/new\" role=\"button\" class=\"btn btn-outline border-solid border-4 flex rounded-md m-2 p-2\" id=\"new_timer\">Create new timer</a>\n<section id=\"new-timer\"></section>\n")
     ; __line = 4
     ;  Timers.forEach((timer) => {
-    ; __append("\n\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2 justify-center\">\n\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\">")
-    ; __line = 9
+    ; __append("\n\n    <div class=\"border-solid border-4 flex flex-wrap flex-row rounded-md m-2 p-2 justify-center\">\n        <div class=\"flex flex-col\">\n            <h2 class=\"text-4xl text-center m-2 p-2\">")
+    ; __line = 8
     ; __append(escapeFn( timer.title))
     ; __append("</h2>\n            <div id=\"")
-    ; __line = 10
+    ; __line = 9
     ; __append(escapeFn( timer._id))
     ; __append("_display\" class=\"")
     ; __append(escapeFn( timer.style))
     ; __append("\"></div>\n        </div>\n        <div class=\"flex flex-col m-2\">\n            <a href=\"/timer/")
+    ; __line = 12
+    ; __append(escapeFn( timer._id))
+    ; __append("/pause\" role=\"button\" class=\"btn m-2 p-2\" id=\"")
+    ; __append(escapeFn( timer._id))
+    ; __append("_pause_resume\">Pause</a>\n            <a href=\"/timer/")
     ; __line = 13
     ; __append(escapeFn( timer._id))
-    ; __append("/edit\" role=\"button\" class=\"btn m-2 p-2\">Play Sound</a>\n            <a href=\"/timer/")
+    ; __append("/edit\" role=\"button\" class=\"btn m-2 p-2\">Edit Timer</a>\n            <a href=\"/timer/")
     ; __line = 14
     ; __append(escapeFn( timer._id))
-    ; __append("/edit\" role=\"button\" class=\"btn m-2 p-2\">Edit Timer</a>\n            <a href=\"/timer/")
-    ; __line = 15
-    ; __append(escapeFn( timer._id))
     ; __append("/delete\" role=\"button\" class=\"btn m-2 p-2\">Delete Timer</a>\n        </div>\n        <div id=\"")
-    ; __line = 17
+    ; __line = 16
     ; __append(escapeFn( timer._id))
     ; __append("_edit\"></div>\n    </div>\n")
-    ; __line = 19
+    ; __line = 18
     ; });
     ; __append("\n\n")
-    ; __line = 21
+    ; __line = 20
     ; __append( include("footer") )
   }
   return __output;

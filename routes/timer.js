@@ -13,7 +13,8 @@ Function to get state of the timer
 */
 function currentState(started, duration) {
     let now = new Date().getTime();
-    return now < started + duration ? "counting" : "expired";
+    console.log(now < parseInt(started) + parseInt(duration) ? "counting" : "expired");
+    return now < parseInt(started) + parseInt(duration) ? "counting" : "expired";
 }
 
 
@@ -68,6 +69,7 @@ router.post("/", function (req, res) {
         style: req.body.style || "style_1",
         started: parseInt(req.body.started) || now,
     };
+    data.state = currentState(parseInt(data.started), parseInt(data.duration));
 
     models.timers.insertOne(data).then(() => {
         if (req.accepts("json")) {
@@ -91,16 +93,32 @@ returns the state of the timer {id} as a JSON object which contains:
 -- counting: current time < started + duration
 -- expired: current time > started + duration
  */
-router.get("/:id", function (req, res) {
+router.post("/:id", function (req, res) {
     let filter = { _id: new ObjectId(req.params.id) };
     models.timers.findOne(filter).then((result) => {
         if (!result) {
             res.status(404).end();
-        } else if (req.accepts("json")) {
-            result.state = currentState(parseInt(result.started), parseInt(result.duration));
-            res.json(result);
         } else {
-            result.state = currentState(parseInt(result.started), parseInt(result.duration));
+            let state = currentState(parseInt(result.started), parseInt(result.duration));
+            if(state === "expired"){
+                let updated_timer = {
+                    _id: result._id,
+                    title: req.body.title || result.title,
+                    sound: req.body.sound || result.sound,
+                    duration: req.body.duration || result.duration,
+                    started: result.started,
+                    state: "expired",
+                    update: true
+                };
+                updated_timer.expires = parseInt(updated_timer.started)+parseInt(updated_timer.duration);
+                models.timers.replaceOne(filter, updated_timer, { upsert: false }).then((result) => {
+                    res.status(201).end();
+                });
+            }
+            if (req.accepts("json")) {
+                res.json(result);
+                return
+            }
             res.send(result).status(200).end();
         }
     });
@@ -141,11 +159,13 @@ router.put("/:id", function (req, res) {
                 sound: "Default Sound",
                 duration: req.body.duration,
                 started: new Date().getTime(),
-                expires: new Date().getTime() + req.body.duration,
+                expires: new Date().getTime() + parseInt(req.body.duration),
             };
+            data.state = currentState(parseInt(data.started), parseInt(data.duration));
             models.timers.insertOne(data).then((result) => {
                 if (req.accepts("json")) {
                     res.status(201).json(data);
+                    eventBus.emit("timer.created", result.value);
                 } else {
                     res.status(406).end();
                 }
@@ -156,8 +176,10 @@ router.put("/:id", function (req, res) {
                 title: req.body.title || result.title,
                 sound: req.body.sound || result.sound,
                 duration: req.body.duration || result.duration,
-                started: result.started,
+                started: new Date().getTime(),
+                pause: false
             };
+            updated_timer.expires = parseInt(updated_timer.started)+parseInt(updated_timer.duration);
             updated_timer.state = currentState(parseInt(updated_timer.started), parseInt(updated_timer.duration));
             models.timers.replaceOne(filter, updated_timer, { upsert: false }).then((result) => {
                 res.status(200).end();
@@ -181,10 +203,10 @@ router.delete("/:id", function (req, res) {
             } else {
                 res.status(204).end();
             }
+            eventBus.emit("timer.deleted", result.value);
         } else {
             res.status(404).end();
         }
-        eventBus.emit("timer.deleted", result.value);
     });
 });
 
@@ -223,6 +245,52 @@ router.get("/", function (req, res) {
         }
     });
 });
+
+
+/*
+POST /timer/:id/pause
+Pause a timer
+The event bus will signal the pause, database record when was the pause signalled.
+*/
+router.post("/timer/:id/pause",function(req,res){
+    let filter = { _id: new ObjectId(req.params.id) };
+
+    models.timers.findOne(filter).then((result) => {
+        if(result!==null){
+            let updated_timer = {
+                _id: result._id,
+                title: result.title,
+                sound: result.sound,
+                duration: result.expires - new Date().getTime(),
+                started: 0,
+                state: "paused",
+            };
+            models.timers.replaceOne(filter, updated_timer, { upsert: false }).then((result) => {
+                res.status(200).end();
+                eventBus.emit("timer.pause", result.value)
+            });
+        } else {
+            res.status(404).end();
+        }
+    })
+})
+
+/*
+POST /timer/:id/resume
+Resume a timer
+Change the timer duration to duration + paused duration
+*/
+router.post("/timer/:id/resume",function(req,res){
+    let filter = { _id: new ObjectId(req.params.id) };
+
+    models.timers.findOne(filter).then((result) => {
+        if(result!==null){
+
+        } else {
+            res.status(404).end();
+        }
+    })
+})
 
 /*
 GET /

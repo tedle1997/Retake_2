@@ -31,8 +31,13 @@ const eventBus = new EventEmitter()
 module.exports.eventBus = eventBus;
 
 async function checkTimers() {
-    const expiredTimers = await models.timers.find({ expires: { $lte: Date.now() }}).toArray();
-    io.emit("timer.expired", expiredTimers);
+    const expiredTimers = await models.timers.find({
+        expires: { $lte: Date.now() },
+        update: { $exists: false }
+        }).toArray();
+    if (expiredTimers.length!==0){
+        io.emit("timer.expired", expiredTimers);
+    }
 }
 setInterval(checkTimers, 100);
 
@@ -48,24 +53,6 @@ eventBus.on('timer.deleted', function(event){
     io.emit('timer.deleted', event);
 });
 
-// Picture app ws
-eventBus.on('picture.created', function(event){
-    //send to all clients
-    io.emit('picture.created', event);
+eventBus.on('timer.pause', function(event){
+    io.emit('timer.pause', event);
 });
-
-eventBus.on('picture.edited', function(event){
-    //send to all clients
-    io.emit('picture.edited', event);
-});
-
-eventBus.on('picture.deleted', function(event){
-    //send to all clients
-    io.emit('picture.deleted', event);
-
-    // io.emit('message', {user: 'Server', text: "Picture Deleted", data: event});
-});
-
-eventBus.on('slideshow.broadcast', (data)=>{
-    io.emit('slideshow', data);
-})

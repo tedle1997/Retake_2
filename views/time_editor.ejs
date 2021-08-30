@@ -1,0 +1,36 @@
+<div class="p-10 card bg-base-200">
+    <form class="form-control">
+        Timer's Title
+        <input type="text" placeholder="Title" class="input input-info input-bordered" name="title">
+        Days
+        <input type="range" min="0" max="366" value="0" class="range range-lg" name="days"
+               oninput="this.nextElementSibling.value = this.value">
+        <output>0</output>
+        Hours
+        <input type="range" max="23" value="0" class="range range-primary range-lg" name="hours"
+               oninput="this.nextElementSibling.value = this.value">
+        <output>0</output>
+        Minutes
+        <input type="range" max="59" value="0" class="range range-secondary range-lg" name="minutes"
+               oninput="this.nextElementSibling.value = this.value">
+        <output>0</output>
+        Seconds
+        <input type="range" max="59" value="0" class="range range-accent range-lg" name="seconds"
+               oninput="this.nextElementSibling.value = this.value">
+        <output>0</output>
+        <select class="select select-bordered select-info w-full max-w-xs" name="sound">
+            <option disabled="disabled">Choose your timer sound</option>
+            <option selected="selected" value="no_sound">no sound</option>
+            <option value="sound_1">Sound 1</option>
+            <option value="sound_2">Sound 2</option>
+            <option value="sound_3">Sound 3</option>
+        </select>
+        <select class="select select-bordered select-info w-full max-w-xs" name="style">
+            <option disabled="disabled">Choose your timer's style</option>
+            <option value="style_1">Style 1</option>
+            <option selected value="style_2">Style 2</option>
+            <option value="style_3">Style 3</option>
+        </select>
+        <input type="submit" value="Submit" class="btn"/>
+    </form>
+</div>
