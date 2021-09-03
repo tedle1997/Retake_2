@@ -1,5 +1,3 @@
-
-
 function getTimersWall(){
     API.getTimers("").then(result => {
 
@@ -9,7 +7,6 @@ function getTimersWall(){
         }
 
         document.getElementById('timers-wall').innerHTML = ejs.views_timers(model);
-
         result.forEach((timer) => {
             let countDownDate = parseInt(timer.started)+parseInt(timer.duration);
             let x = setInterval(function(){
@@ -21,33 +18,27 @@ function getTimersWall(){
                 let distance = countDownDate - now;
 
                 let pause_resume_btn = document.getElementById(timer._id+"_pause_resume");
-                if(timer.state === "paused"){
+                if(timer.state === "paused" && pause_resume_btn!== null){
                     clearInterval(x);
                     distance = parseInt(timer.expires)-parseInt(timer.started);
                     pause_resume_btn.innerHTML = "Resume";
                     let link = pause_resume_btn.getAttribute('href').replace("/pause", "/resume");
                     pause_resume_btn.setAttribute('href',link);
                 } else if (pause_resume_btn !== null && pause_resume_btn.innerHTML === "Resume"){
+                    clearInterval(x);
                     pause_resume_btn.innerHTML = "Pause";
                     let link = pause_resume_btn.getAttribute('href').replace("/resume", "/pause");
                     pause_resume_btn.setAttribute('href',link);
                 }
 
-                // If the count down is over, write some text
-                if (distance < 0) {
-                    clearInterval(x);
-                    if(timer.sound!=="no_sound"){
-                        let audio = new Audio("../sound/"+timer.sound+".mp3");
-                        audio.play();
-                    }
-                }
+
 
                 // Time calculations for days, hours, minutes and seconds
                 let days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                let miliseconds = Math.floor((distance % 6));
+
 
                 switch (timer.style){
                     case "style_1":{
@@ -55,35 +46,31 @@ function getTimersWall(){
                         if (target === null) break;
                         target.innerHTML =
                             `<div class="grid grid-flow-col gap-5 text-center auto-cols-max">
-                        <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
-                        <span class="font-mono text-5xl countdown">
-                        <span style="--value:${days}"></span>
-                        </span>
-                        days
-                        
-                        </div>
-                        <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
-                        <span class="font-mono text-5xl countdown">
-                        <span style="--value:${hours}"></span>
-                        </span>
-                        hours
-                        
-                        </div>
-                        <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
-                        <span class="font-mono text-5xl countdown">
-                        <span style="--value:${minutes}"></span>
-                        </span>
-                        min
-                        
-                        </div>
-                        <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
-                        <span class="font-mono text-5xl countdown">
-                        <span style="--value:${seconds};"></span>
-                        </span>
-                        sec
-                        
-                        </div>
-                        </div>`;
+                                <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
+                                    <span class="font-mono text-5xl countdown">
+                                    <span style="--value:${days}"></span>
+                                    </span>
+                                    days
+                                </div>
+                                <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
+                                    <span class="font-mono text-5xl countdown">
+                                    <span style="--value:${hours}"></span>
+                                    </span>
+                                    hours
+                                </div>
+                                <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
+                                    <span class="font-mono text-5xl countdown">
+                                    <span style="--value:${minutes}"></span>
+                                    </span>
+                                    min
+                                </div>
+                                <div class="flex flex-col p-2 bg-accent rounded-box text-neutral-content">
+                                    <span class="font-mono text-5xl countdown">
+                                    <span style="--value:${seconds};"></span>
+                                    </span>
+                                    sec
+                                </div>
+                            </div>`;
                         document.getElementById(timer._id+"_edit_btn").classList.add("btn-accent");
                         document.getElementById(timer._id+"_pause_resume").classList.add("btn-accent");
                         document.getElementById(timer._id+"_delete").classList.add("btn-accent");
@@ -130,14 +117,12 @@ function getTimersWall(){
                         if (target === null) break;
                         target.innerHTML =
                             `<div class="grid grid-flow-col gap-5 text-center auto-cols-max">
-
                         <div class="flex flex-col p-2  bg-secondary rounded-box text-neutral-content">
                         <span class="font-mono text-5xl countdown">
                         <span style="--value:${days}"></span>
                         </span>
                         days       
                         </div>
-
                         
                         <div class="flex flex-col p-2  bg-secondary rounded-box text-neutral-content">
                         <span class="font-mono text-5xl countdown">
@@ -155,7 +140,7 @@ function getTimersWall(){
                         </div>
                         <div class="flex flex-col p-2  bg-secondary rounded-box text-neutral-content">
                         <span class="font-mono text-5xl countdown">
-                        <span style="--value:${seconds};"></span>
+                        <span style="--value:${seconds}"></span>
                         </span>
                         sec
                         
@@ -168,6 +153,17 @@ function getTimersWall(){
                     }
                         break;
                 }
+                // If the count down is over, write some text
+                if (distance < 0) {
+                    clearInterval(x);
+                    if(timer.sound!=="no_sound" && pause_resume_btn!== null){
+                        document.getElementById(timer._id+"_display").innerHTML =
+                            `<h1 class="font-mono text-5xl">TIMER EXPIRED</h1>`;
+                        let audio = new Audio("../sound/"+timer.sound+".mp3");
+                        audio.play();
+                    }
+                }
+
             }, 100);
         });
 

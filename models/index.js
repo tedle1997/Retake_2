@@ -19,7 +19,6 @@ MongoClient
   .connect(mongodb_uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(client => {
     model.db = client.db(db_name);
-    model.pictures = model.db.collection('pictures');
     model.timers = model.db.collection('timers');
   })
   .catch(err => console.error(err));

@@ -38,7 +38,6 @@ app.set('view engine', 'ejs');
 //controllers
 const routers = require('./routes');
 
-app.use('/pictures', routers.pictures);
 app.use('/timer', routers.timer);
 
 //default fallback handlers

@@ -241,10 +241,10 @@ router.post("/:id/pause",function(req,res){
                 started: new Date().getTime(),
                 expires: parseInt(result.expires),
                 state: "paused",
-                style: req.body.style || "style_2"
+                style: result.style,
             };
             models.timers.replaceOne(filter, updated_timer, { upsert: false }).then((result) => {
-                eventBus.emit("timer.paused", result.value)
+                eventBus.emit("timer.paused", result.ops[0]);
                 res.status(200).end();
             });
         } else {
@@ -270,11 +270,11 @@ router.post("/:id/resume",function(req,res){
                 duration: result.duration,
                 started: new Date().getTime(),
                 expires: new Date().getTime() + result.duration,
-                style: req.body.style || "style_2"
+                style: result.style,
             };
             updated_timer.state = currentState(parseInt(updated_timer.started), parseInt(updated_timer.duration));
             models.timers.replaceOne(filter, updated_timer, { upsert: false }).then((result) => {
-                eventBus.emit("timer.resumed", result.value)
+                eventBus.emit("timer.resumed", result)
                 res.status(200).end();
             });
         } else {
@@ -301,7 +301,7 @@ router.post("/:id", function (req, res) {
                     sound: req.body.sound || result.sound,
                     duration: req.body.duration || result.duration,
                     started: result.started,
-                    style: req.body.style || "style_2",
+                    style: req.body.style || result.style,
                     state: "expired",
                     update: true
                 };
