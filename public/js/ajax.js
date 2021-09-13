@@ -19,6 +19,20 @@ function getTimersWall(){
                 // Find the distance between now and the count down date
                 let distance = countDownDate - now;
 
+                if(timer.state === "paused"){
+                    distance = parseInt(timer.expires)-parseInt(timer.started);
+                    let pause_resume_btn = document.getElementById(timer._id+"_pause_resume");
+                    if(pause_resume_btn.innerHTML === "Pause"){
+                        clearInterval(interval_dictionary[timer._id]);
+                        pause_resume_btn.innerHTML = "Resume";
+                        let link = pause_resume_btn.getAttribute('href').replace("/pause", "/resume");
+                        pause_resume_btn.setAttribute('href',link);
+                    } else {
+                        pause_resume_btn.innerHTML = "Pause";
+                        let link = pause_resume_btn.getAttribute('href').replace("/resume", "/pause");
+                        pause_resume_btn.setAttribute('href',link);
+                    }
+                }
 
 
                 // Time calculations for days, hours, minutes and seconds
@@ -143,14 +157,12 @@ function getTimersWall(){
                 // If the count down is over, write some text
                 if (distance < 0) {
                     clearInterval(x);
-                    if(timer.sound!=="no_sound"){
-                        let timer_display = document.getElementById(timer._id+"_display");
-                        if (timer_display !== null){
-                            timer_display.innerHTML =
-                                `<h1 class="font-mono text-5xl">TIMER EXPIRED</h1>`;
-                            let audio = new Audio("../sound/"+timer.sound+".mp3");
-                            audio.play();
-                        }
+                    const expired_timer = document.getElementById(timer._id+"_display");
+                    if(timer.sound!=="no_sound" && expired_timer!==null){
+                        expired_timer.innerHTML =
+                            `<h1 class="font-mono text-5xl">TIMER EXPIRED</h1>`;
+                        let audio = new Audio("../sound/"+timer.sound+".mp3");
+                        audio.play();
                     }
                 }
 
@@ -249,20 +261,8 @@ function editTimer(url) {
 }
 
 function pauseResumeTimer(url){
-    const timer_id = url.pathname.split("/")[2];
-
-    let pause_resume_btn = document.getElementById(timer_id+"_pause_resume");
-    if(pause_resume_btn.innerHTML === "Pause"){
-        clearInterval(interval_dictionary[timer_id]);
-        pause_resume_btn.innerHTML = "Resume";
-        let link = pause_resume_btn.getAttribute('href').replace("/pause", "/resume");
-        pause_resume_btn.setAttribute('href',link);
-    } else {
-        pause_resume_btn.innerHTML = "Pause";
-        let link = pause_resume_btn.getAttribute('href').replace("/resume", "/pause");
-        pause_resume_btn.setAttribute('href',link);
-    }
-    fetch(url, {method: "POST"});
+    fetch(url, {method: "POST"}).then(() => {
+    });
 }
 
 function linkClick(event) {
@@ -343,11 +343,11 @@ function init(){
     })
 
     socket.on("timer.paused", (event)=>{
-
+        window.location.reload();
     })
 
     socket.on("timer.resumed", (event)=>{
-       getTimersWall();
+        window.location.reload();
     })
 
     let msg = {test:"Hello server"};
