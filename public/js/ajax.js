@@ -1,3 +1,5 @@
+let interval_dictionary = {};
+
 function getTimersWall(){
     API.getTimers("").then(result => {
 
@@ -17,20 +19,6 @@ function getTimersWall(){
                 // Find the distance between now and the count down date
                 let distance = countDownDate - now;
 
-                let pause_resume_btn = document.getElementById(timer._id+"_pause_resume");
-                if(timer.state === "paused" && pause_resume_btn!== null){
-                    clearInterval(x);
-                    distance = parseInt(timer.expires)-parseInt(timer.started);
-                    pause_resume_btn.innerHTML = "Resume";
-                    let link = pause_resume_btn.getAttribute('href').replace("/pause", "/resume");
-                    pause_resume_btn.setAttribute('href',link);
-                } else if (pause_resume_btn !== null && pause_resume_btn.innerHTML === "Resume"){
-                    clearInterval(x);
-                    pause_resume_btn.innerHTML = "Pause";
-                    let link = pause_resume_btn.getAttribute('href').replace("/resume", "/pause");
-                    pause_resume_btn.setAttribute('href',link);
-                }
-
 
 
                 // Time calculations for days, hours, minutes and seconds
@@ -38,7 +26,6 @@ function getTimersWall(){
                 let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
 
                 switch (timer.style){
                     case "style_1":{
@@ -156,15 +143,20 @@ function getTimersWall(){
                 // If the count down is over, write some text
                 if (distance < 0) {
                     clearInterval(x);
-                    if(timer.sound!=="no_sound" && pause_resume_btn!== null){
-                        document.getElementById(timer._id+"_display").innerHTML =
-                            `<h1 class="font-mono text-5xl">TIMER EXPIRED</h1>`;
-                        let audio = new Audio("../sound/"+timer.sound+".mp3");
-                        audio.play();
+                    if(timer.sound!=="no_sound"){
+                        let timer_display = document.getElementById(timer._id+"_display");
+                        if (timer_display !== null){
+                            timer_display.innerHTML =
+                                `<h1 class="font-mono text-5xl">TIMER EXPIRED</h1>`;
+                            let audio = new Audio("../sound/"+timer.sound+".mp3");
+                            audio.play();
+                        }
                     }
                 }
 
             }, 100);
+            interval_dictionary[timer._id] = x;
+
         });
 
         //intercept link clicks
@@ -177,6 +169,9 @@ function getTimersWall(){
 
 function deleteTimer(url){
     url = url.pathname.replace("/delete", "");
+    console.log(url);
+    const timer_id = url.split("/")[2];
+    clearInterval(interval_dictionary[timer_id]);
     fetch(url, { method: "DELETE"}).then(res=>{
         getTimersWall();
     });
@@ -254,6 +249,19 @@ function editTimer(url) {
 }
 
 function pauseResumeTimer(url){
+    const timer_id = url.pathname.split("/")[2];
+
+    let pause_resume_btn = document.getElementById(timer_id+"_pause_resume");
+    if(pause_resume_btn.innerHTML === "Pause"){
+        clearInterval(interval_dictionary[timer_id]);
+        pause_resume_btn.innerHTML = "Resume";
+        let link = pause_resume_btn.getAttribute('href').replace("/pause", "/resume");
+        pause_resume_btn.setAttribute('href',link);
+    } else {
+        pause_resume_btn.innerHTML = "Pause";
+        let link = pause_resume_btn.getAttribute('href').replace("/resume", "/pause");
+        pause_resume_btn.setAttribute('href',link);
+    }
     fetch(url, {method: "POST"});
 }
 
@@ -275,6 +283,7 @@ function linkClick(event) {
         editTimer(url);
     }
     if(button_url.pathname.endsWith("/pause")){
+        console.log(button_url.pathname);
         pauseResumeTimer(url);
     }
     if(button_url.pathname.endsWith("/resume")){
@@ -334,11 +343,11 @@ function init(){
     })
 
     socket.on("timer.paused", (event)=>{
-        window.location.reload();
+
     })
 
     socket.on("timer.resumed", (event)=>{
-        window.location.reload();
+       getTimersWall();
     })
 
     let msg = {test:"Hello server"};
